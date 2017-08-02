@@ -2,7 +2,8 @@ require "kele/version"
 require './lib/kele'
 require 'httparty'
 require 'json'
-require './lib/roadmap'
+require './lib/kele/roadmap'
+require './lib/kele/errors'
 
 class Kele
     include HTTParty
@@ -44,5 +45,15 @@ class Kele
         {headers: {
             authorization: @auth_token
         }}
+    end
+    
+    def get_checkpoint(checkpoint_id)
+    response = self.class.get(base_api_endpoint("checkpoints/#{checkpoint_id}"), headers: { "authorization" => @auth_token })
+    @checkpoint = JSON.parse(response.body)
+    end
+    
+    def create_submissions(checkpoint_id, assignment_branch, assignment_commit_link, comment)
+    response = self.class.post(base_api_endpoint("checkpoint_submissions"), body: { "checkpoint_id": checkpoint_id, "assignment_branch": assignment_branch, "assignment_commit_link": assignment_commit_link, "comment": comment }, headers: { "authorization" => @auth_token })
+    puts response
     end
 end
