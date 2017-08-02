@@ -2,9 +2,11 @@ require "kele/version"
 require './lib/kele'
 require 'httparty'
 require 'json'
+require './lib/roadmap'
 
 class Kele
     include HTTParty
+    include Roadmap
     
     def initialize(email, password)
         response = self.class.post(api_url('sessions'), body: { "email": email, "password": password })
